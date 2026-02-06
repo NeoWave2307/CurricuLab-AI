@@ -10,12 +10,17 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# CSS
+# Remove Streamlit branding
 st.markdown("""
 <style>
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    [data-testid="stSidebar"] {display: none;}
+    #MainMenu {display: none !important;}
+    footer {display: none !important;}
+    header {display: none !important;}
+    [data-testid="stSidebar"] {display: none !important;}
+    [data-testid="stToolbar"] {display: none !important;}
+    [data-testid="stDecoration"] {display: none !important;}
+    [data-testid="stStatusWidget"] {display: none !important;}
+    .stDeployButton {display: none !important;}
     
     .stApp {
         background: #f7f7f8;

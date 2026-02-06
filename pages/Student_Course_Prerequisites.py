@@ -8,9 +8,13 @@ from src.llm.scenario_prompts import get_course_prerequisites_prompt
 
 st.set_page_config(page_title="Course Prerequisites", page_icon="📖", layout="centered", initial_sidebar_state="collapsed")
 
+# Remove Streamlit branding
 st.markdown("""
 <style>
-    #MainMenu {visibility: hidden;} footer {visibility: hidden;} [data-testid="stSidebar"] {display: none;}
+    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
+    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
+    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
+    .stDeployButton {display: none !important;}
     .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
     .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
 </style>

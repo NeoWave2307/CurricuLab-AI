@@ -12,14 +12,18 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Minimalistic CSS
+# Remove Streamlit branding completely
 st.markdown("""
 <style>
-    /* Hide streamlit branding */
-    #MainMenu {visibility: hidden;}
-    footer {visibility: hidden;}
-    header {visibility: hidden;}
-    [data-testid="stSidebar"] {display: none;}
+    /* Remove all Streamlit branding and unnecessary elements */
+    #MainMenu {display: none !important;}
+    footer {display: none !important;}
+    header {display: none !important;}
+    [data-testid="stSidebar"] {display: none !important;}
+    [data-testid="stToolbar"] {display: none !important;}
+    [data-testid="stDecoration"] {display: none !important;}
+    [data-testid="stStatusWidget"] {display: none !important;}
+    .stDeployButton {display: none !important;}
     
     /* Clean styling */
     .stApp {
