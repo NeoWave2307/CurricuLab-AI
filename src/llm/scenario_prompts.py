@@ -346,20 +346,32 @@ Use valid JSON. Be specific and actionable."""
 
 
 def get_career_path_planner_prompt(
-    current_position: str,
-    target_role: str,
-    timeframe: str,
+    current_position: str = None,
+    target_role: str = None,
+    timeframe: str = None,
+    current_education: str = None,
+    field_of_study: str = None,
+    current_skills: str = None,
+    target_industry: str = None,
+    interests: str = None,
     constraints: list = None
 ) -> str:
     """Create detailed career path"""
+    
+    details = ""
+    if current_position: details += f"\nCurrent Position: {current_position}"
+    if current_education: details += f"\nCurrent Education: {current_education}"
+    if field_of_study: details += f"\nField of Study: {field_of_study}"
+    if current_skills: details += f"\nCurrent Skills: {current_skills}"
+    if target_industry: details += f"\nTarget Industry: {target_industry}"
+    if interests: details += f"\nInterests: {interests}"
     
     constraints_text = f"\nConstraints: {', '.join(constraints)}" if constraints else ""
     
     return f"""Create a detailed career development plan:
 
-Current Position: {current_position}
 Target Role: {target_role}
-Timeframe: {timeframe}{constraints_text}
+Timeframe: {timeframe}{details}{constraints_text}
 
 Provide:
 1. Career milestones and intermediate roles
@@ -371,34 +383,45 @@ Provide:
 
 Return as JSON:
 {{
-  "career_milestones": [
+  "milestones": [
     {{
-      "milestone": "string",
-      "target_date": "string",
-      "requirements": ["req1"],
-      "deliverables": ["deliverable1"]
+      "time_period": "string",
+      "title": "string",
+      "role": "string",
+      "skills_required": ["skill1"],
+      "action_items": ["item1"]
     }}
   ],
-  "skill_development_plan": {{
-    "technical_skills": ["skill1"],
-    "soft_skills": ["skill1"],
-    "tools_technologies": ["tool1"]
-  }},
-  "certifications": [
+  "skills_development": [
     {{
-      "name": "string",
-      "priority": "High/Medium/Low",
-      "estimated_cost": "string",
-      "estimated_time": "string",
-      "when_to_pursue": "string"
+        "skill": "string",
+        "priority": "High/Medium/Low",
+        "time_to_acquire": "string",
+        "learning_resources": ["resource1"]
     }}
   ],
-  "portfolio_projects": ["project1"],
-  "experience_recommendations": ["recommendation1"],
-  "monthly_action_plan": {{
-    "Month 1-3": ["action1"],
-    "Month 4-6": ["action1"]
-  }}
+  "experience_building": [
+      {{
+          "type": "Internship/Project/Work",
+          "description": "string",
+          "timeline": "string",
+          "impact": "string",
+          "how_to_find": "string"
+      }}
+  ],
+  "networking": [
+      {{
+          "activity": "string",
+          "description": "string"
+      }}
+  ],
+   "alternative_paths": [
+      {{
+          "role": "string",
+          "description": "string",
+          "required_pivot": "string"
+      }}
+   ]
 }}
 
 Use valid JSON. Be realistic and specific."""
@@ -408,17 +431,23 @@ def get_job_opportunities_prompt(
     skills: list,
     interests: list,
     experience_level: str,
-    location_preference: str = None
+    location_preference: str = None,
+    education_level: str = None,
+    field_of_study: str = None,
+    job_types: str = None,
+    preferred_industries: str = None
 ) -> str:
     """Recommend job opportunities"""
     
     location = f"\nLocation Preference: {location_preference}" if location_preference else "\nLocation: Remote/Flexible"
+    education = f"\nEducation: {education_level} in {field_of_study}" if education_level else ""
+    prefs = f"\nPreferences: {job_types}, {preferred_industries}" if job_types else ""
     
     return f"""Recommend suitable job opportunities based on:
 
-Skills: {', '.join(skills)}
-Interests: {', '.join(interests)}
-Experience Level: {experience_level}{location}
+Skills: {', '.join(skills) if isinstance(skills, list) else skills}
+Interests: {', '.join(interests) if isinstance(interests, list) else interests}
+Experience Level: {experience_level}{location}{education}{prefs}
 
 Provide:
 1. Matching job roles with fit scores
@@ -431,24 +460,39 @@ Return as JSON:
 {{
   "recommended_roles": [
     {{
-      "job_title": "string",
-      "match_score": 1-100,
+      "role_title": "string",
+      "match_percentage": 1-100,
+      "description": "string",
       "required_skills": ["skill1"],
       "optional_skills": ["skill1"],
       "skills_you_have": ["skill1"],
-      "skills_to_develop": ["skill1"],
+      "skill_gaps": ["gap1"],
+      "learning_resources": ["resource1"],
       "typical_salary_range": "string",
       "growth_potential": "High/Medium/Low",
       "market_demand": "High/Medium/Low"
     }}
   ],
-  "target_companies": ["company1"],
-  "job_search_strategies": ["strategy1"],
-  "networking_tips": ["tip1"],
-  "interview_preparation": ["tip1"]
+  "target_companies": [
+    {{
+      "company_name": "string",
+      "company_type": "string",
+      "size": "string",
+      "why_good_fit": "string",
+      "typical_roles": ["role1"]
+    }}
+  ],
+  "job_search_strategy": [
+    {{
+       "strategy": "string",
+       "description": "string",
+       "action_items": ["item1"]
+    }}
+  ],
+  "networking_suggestions": ["suggestion1"]
 }}
 
-Use valid JSON. Focus on realistic, achievable opportunities."""
+Use valid JSON. Focus on realistic, achievable opportunities. Calculate match_percentage generously based on skills overlap."""
 
 
 def get_project_ideas_prompt(

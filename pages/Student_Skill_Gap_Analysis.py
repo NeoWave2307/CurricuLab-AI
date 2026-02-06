@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_skill_gap_analysis_prompt
 
-st.set_page_config(page_title="Skill Gap Analysis", page_icon="📄", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Skill Gap Analysis", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Student_Dashboard.py")
 
-st.title("📄 Skill Gap Analysis")
+st.title("Skill Gap Analysis")
 st.caption("Identify skill gaps and get personalized learning recommendations")
 
 # Form
@@ -88,7 +82,7 @@ if 'skill_analysis' in st.session_state:
     
     # Current Skills
     if 'current_skills' in analysis:
-        with st.expander("✅ Your Current Skills", expanded=True):
+        with st.expander("Your Current Skills", expanded=True):
             for skill in analysis['current_skills']:
                 st.markdown(f"**{skill.get('skill', '')}** - {skill.get('proficiency_level', '')}")
                 if skill.get('evidence'):
@@ -96,16 +90,16 @@ if 'skill_analysis' in st.session_state:
     
     # Skill Gaps
     if 'skill_gaps' in analysis:
-        with st.expander("🎯 Skill Gaps to Address", expanded=True):
+        with st.expander("Skill Gaps to Address", expanded=True):
             for gap in analysis['skill_gaps']:
                 importance = gap.get('importance', '')
-                emoji = "🔴" if importance == "Critical" else "🟡" if importance == "High" else "🟢"
+                emoji = ""
                 st.markdown(f"{emoji} **{gap.get('skill', '')}** - {importance}")
                 st.caption(f"Time to acquire: {gap.get('estimated_time', '')} | Difficulty: {gap.get('difficulty_to_acquire', '')}")
     
     # Learning Roadmap
     if 'learning_roadmap' in analysis:
-        with st.expander("📚 Your Learning Roadmap"):
+        with st.expander("Your Learning Roadmap"):
             for item in sorted(analysis['learning_roadmap'], key=lambda x: x.get('priority', 10), reverse=True):
                 st.markdown(f"**Priority {item.get('priority', '')}: {item.get('skill', '')}**")
                 st.markdown(f"*Estimated Duration: {item.get('estimated_duration', '')}*")
@@ -113,7 +107,7 @@ if 'skill_analysis' in st.session_state:
                 if item.get('learning_path'):
                     st.markdown("Learning Path:")
                     for step in item['learning_path']:
-                        st.markdown(f"  → {step}")
+                        st.markdown(f"  -> {step}")
                 
                 if item.get('resources'):
                     st.markdown("Resources:")
@@ -123,13 +117,13 @@ if 'skill_analysis' in st.session_state:
     
     # Strengths
     if 'strengths' in analysis:
-        with st.expander("💪 Your Strengths"):
+        with st.expander("Your Strengths"):
             for strength in analysis['strengths']:
                 st.markdown(f"- {strength}")
     
     # Recommended Focus
     if 'recommended_focus' in analysis:
-        st.markdown("#### 🎯 Recommended Focus Areas")
+        st.markdown("#### Recommended Focus Areas")
         cols = st.columns(min(len(analysis['recommended_focus']), 3))
         for idx, skill in enumerate(analysis['recommended_focus']):
             with cols[idx % 3]:

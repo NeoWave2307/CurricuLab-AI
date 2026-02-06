@@ -22,7 +22,7 @@ class EmbeddingService:
         """
         print(f"Loading embedding model: {model_name}...")
         self.model = SentenceTransformer(model_name)
-        print(f"✓ Model loaded successfully (dimension: {self.model.get_sentence_embedding_dimension()})")
+        print(f"Model loaded successfully (dimension: {self.model.get_sentence_embedding_dimension()})")
     
     def embed_text(self, text: str) -> List[float]:
         """

@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_industry_tools_prompt
 
-st.set_page_config(page_title="Industry Tools & Tech", page_icon="🛠️", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Industry Tools & Tech", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Student_Dashboard.py")
 
-st.title("🛠️ Industry Tools & Technologies")
+st.title("Industry Tools & Technologies")
 st.caption("Discover the tools and technologies used in your target industry or role")
 
 with st.form("industry_tools_form"):
@@ -116,10 +110,10 @@ if 'industry_tools' in st.session_state:
     
     # Essential Tools
     if 'essential_tools' in tools_data:
-        with st.expander("🔥 Must-Learn Tools", expanded=True):
+        with st.expander("Must-Learn Tools", expanded=True):
             for tool in tools_data['essential_tools']:
                 importance = tool.get('importance', '')
-                emoji = "🔴" if importance == "Critical" else "🟡" if importance == "High" else "🟢"
+                emoji = ""
                 
                 st.markdown(f"{emoji} **{tool.get('tool_name', '')}**")
                 st.markdown(f"Category: {tool.get('category', '')} | Importance: {importance}")
@@ -132,7 +126,7 @@ if 'industry_tools' in st.session_state:
     
     # Optional/Nice-to-Have Tools
     if 'optional_tools' in tools_data:
-        with st.expander("➕ Nice-to-Have Tools"):
+        with st.expander("Nice-to-Have Tools"):
             for tool in tools_data['optional_tools']:
                 st.markdown(f"**{tool.get('tool_name', '')}**")
                 st.caption(f"Category: {tool.get('category', '')} | Advantage: {tool.get('advantage', '')}")
@@ -140,7 +134,7 @@ if 'industry_tools' in st.session_state:
     
     # Learning Path
     if 'learning_path' in tools_data:
-        with st.expander("📚 Recommended Learning Path"):
+        with st.expander("Recommended Learning Path"):
             for step in tools_data['learning_path']:
                 st.markdown(f"### Step {step.get('step', '')}: {step.get('phase', '')}")
                 st.caption(f"Duration: {step.get('duration', '')}")
@@ -163,7 +157,7 @@ if 'industry_tools' in st.session_state:
     
     # Toolstack Examples
     if 'typical_toolstacks' in tools_data:
-        with st.expander("🏗️ Typical Tool Stacks"):
+        with st.expander("Typical Tool Stacks"):
             for stack in tools_data['typical_toolstacks']:
                 st.markdown(f"**{stack.get('stack_name', '')}**")
                 st.markdown(f"Used for: {stack.get('use_case', '')}")
@@ -174,7 +168,7 @@ if 'industry_tools' in st.session_state:
     
     # Emerging Technologies
     if 'emerging_technologies' in tools_data:
-        with st.expander("🚀 Emerging Technologies to Watch"):
+        with st.expander("Emerging Technologies to Watch"):
             for tech in tools_data['emerging_technologies']:
                 st.markdown(f"**{tech.get('technology', '')}**")
                 st.markdown(f"Status: {tech.get('adoption_status', '')} | Future potential: {tech.get('future_potential', '')}")
@@ -183,7 +177,7 @@ if 'industry_tools' in st.session_state:
     
     # Certifications
     if 'relevant_certifications' in tools_data:
-        with st.expander("🎓 Relevant Certifications"):
+        with st.expander("Relevant Certifications"):
             for cert in tools_data['relevant_certifications']:
                 st.markdown(f"**{cert.get('certification', '')}**")
                 st.markdown(f"Provider: {cert.get('provider', '')}")
@@ -192,9 +186,9 @@ if 'industry_tools' in st.session_state:
     
     # Practical Tips
     if 'practical_tips' in tools_data:
-        with st.expander("💡 Practical Learning Tips"):
+        with st.expander("Practical Learning Tips"):
             for tip in tools_data['practical_tips']:
-                st.info(f"• {tip}")
+                st.info(f"- {tip}")
     
     st.markdown("---")
     st.download_button(

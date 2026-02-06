@@ -165,4 +165,4 @@ class CurriculumPDFGenerator:
         with open(filename, 'wb') as f:
             f.write(buffer.read())
         
-        print(f"✓ PDF saved to: {filename}")
+        print(f"PDF saved to: {filename}")

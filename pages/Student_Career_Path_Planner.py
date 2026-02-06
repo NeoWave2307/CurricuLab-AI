@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_career_path_planner_prompt
 
-st.set_page_config(page_title="Career Path Planner", page_icon="🗺️", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Career Path Planner", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Student_Dashboard.py")
 
-st.title("🗺️ Career Path Planner")
+st.title("Career Path Planner")
 st.caption("Get a personalized roadmap from your current position to your career goals")
 
 # Form
@@ -114,7 +108,7 @@ if 'career_path' in st.session_state:
     
     # Milestones
     if 'milestones' in career_path:
-        with st.expander("🎯 Career Milestones", expanded=True):
+        with st.expander("Career Milestones", expanded=True):
             for milestone in career_path['milestones']:
                 st.markdown(f"### {milestone.get('timeline', '')} - {milestone.get('title', '')}")
                 st.markdown(f"**Role:** {milestone.get('role', '')}")
@@ -128,7 +122,7 @@ if 'career_path' in st.session_state:
     
     # Skills Development Plan
     if 'skills_development' in career_path:
-        with st.expander("📚 Skills Development Plan"):
+        with st.expander("Skills Development Plan"):
             for skill_plan in career_path['skills_development']:
                 st.markdown(f"**{skill_plan.get('skill', '')}**")
                 st.caption(f"Priority: {skill_plan.get('priority', '')} | Time: {skill_plan.get('time_to_acquire', '')}")
@@ -141,7 +135,7 @@ if 'career_path' in st.session_state:
     
     # Experience Building
     if 'experience_building' in career_path:
-        with st.expander("💼 Experience Building Strategy"):
+        with st.expander("Experience Building Strategy"):
             for exp in career_path['experience_building']:
                 st.markdown(f"**{exp.get('type', '')}:** {exp.get('description', '')}")
                 st.caption(f"Timeline: {exp.get('timeline', '')} | Impact: {exp.get('impact', '')}")
@@ -152,13 +146,13 @@ if 'career_path' in st.session_state:
     
     # Networking Recommendations
     if 'networking' in career_path:
-        with st.expander("🤝 Networking Recommendations"):
+        with st.expander("Networking Recommendations"):
             for network in career_path['networking']:
                 st.markdown(f"- **{network.get('activity', '')}:** {network.get('description', '')}")
     
     # Alternative Paths
     if 'alternative_paths' in career_path:
-        with st.expander("🔀 Alternative Career Paths"):
+        with st.expander("Alternative Career Paths"):
             for alt in career_path['alternative_paths']:
                 st.markdown(f"**{alt.get('role', '')}**")
                 st.markdown(f"{alt.get('description', '')}")

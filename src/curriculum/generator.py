@@ -45,19 +45,19 @@ class CurriculumGenerator:
         Returns:
             Generated curriculum
         """
-        print(f"\n🎓 Generating {request.level} curriculum for {request.skill}...")
+        print(f"\nGenerating {request.level} curriculum for {request.skill}...")
         
         # Step 1: RAG retrieval (if enabled)
         context = ""
         if use_rag and self.vector_store.get_count() > 0:
-            print("📚 Retrieving similar curriculum examples...")
+            print("Retrieving similar curriculum examples...")
             similar_curricula = self.retriever.retrieve_similar_curricula(
                 skill=request.skill,
                 level=request.level,
                 k=3
             )
             context = self.retriever.format_context_for_llm(similar_curricula)
-            print(f"✓ Retrieved {len(similar_curricula)} similar examples")
+            print(f"Retrieved {len(similar_curricula)} similar examples")
         
         # Step 2: Generate prompt
         prompt = get_curriculum_generation_prompt(
@@ -70,7 +70,7 @@ class CurriculumGenerator:
         )
         
         # Step 3: Generate with LLM
-        print("🤖 Generating curriculum with Gemini...")
+        print("Generating curriculum with Gemini...")
         response = self.llm_client.generate_with_retry(
             prompt=prompt,
             temperature=0.5  # Lower temperature for more consistent JSON
@@ -99,18 +99,18 @@ class CurriculumGenerator:
             curriculum_data = json.loads(json_str)
             curriculum = Curriculum(**curriculum_data)
             
-            print(f"✓ Successfully generated curriculum with {len(curriculum.semesters)} semesters")
+            print(f"Successfully generated curriculum with {len(curriculum.semesters)} semesters")
             return curriculum
         
         except json.JSONDecodeError as e:
-            print(f"❌ JSON parsing failed: {str(e)}")
+            print(f"JSON parsing failed: {str(e)}")
             print(f"Response preview: {response[:500]}")
             raise ValueError(
                 f"Failed to parse curriculum JSON. The AI generated invalid JSON format. "
                 f"Error: {str(e)}. Please try again."
             )
         except Exception as e:
-            print(f"❌ Validation failed: {str(e)}")
+            print(f"Validation failed: {str(e)}")
             raise ValueError(f"Failed to create curriculum object: {str(e)}")
     
     def generate_from_dict(self, request_dict: dict) -> Curriculum:

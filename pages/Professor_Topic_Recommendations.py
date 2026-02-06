@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_topic_recommendations_prompt
 
-st.set_page_config(page_title="Topic Recommendations", page_icon="📚", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Topic Recommendations", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Professor_Dashboard.py")
 
-st.title("📚 Topic Recommendations")
+st.title("Topic Recommendations")
 st.caption("Get suggestions for topics to add, update, or remove in your courses")
 
 with st.form("topic_recommendations_form"):
@@ -107,7 +101,7 @@ if 'topic_recommendations' in st.session_state:
     st.markdown("## Topic Recommendations")
     
     if 'topics_to_add' in recommendations:
-        with st.expander("➕ Topics to Add", expanded=True):
+        with st.expander("Topics to Add", expanded=True):
             for topic in recommendations['topics_to_add']:
                 st.markdown(f"### {topic.get('topic', '')}")
                 st.markdown(f"**Rationale:** {topic.get('rationale', '')}")
@@ -123,7 +117,7 @@ if 'topic_recommendations' in st.session_state:
                 st.markdown("---")
     
     if 'topics_to_update' in recommendations:
-        with st.expander("🔄 Topics to Update"):
+        with st.expander("Topics to Update"):
             for topic in recommendations['topics_to_update']:
                 st.markdown(f"**{topic.get('topic', '')}**")
                 st.markdown(f"Current Status: {topic.get('current_status', '')}")
@@ -132,7 +126,7 @@ if 'topic_recommendations' in st.session_state:
                 st.markdown("")
     
     if 'topics_to_remove' in recommendations:
-        with st.expander("➖ Topics to Consider Removing"):
+        with st.expander("Topics to Consider Removing"):
             for topic in recommendations['topics_to_remove']:
                 st.markdown(f"**{topic.get('topic', '')}**")
                 st.markdown(f"**Reason:** {topic.get('reason', '')}")
@@ -141,13 +135,13 @@ if 'topic_recommendations' in st.session_state:
                 st.markdown("")
     
     if 'topic_sequence' in recommendations:
-        with st.expander("📋 Suggested Topic Sequence"):
+        with st.expander("Suggested Topic Sequence"):
             for idx, item in enumerate(recommendations['topic_sequence'], 1):
                 st.markdown(f"{idx}. **{item.get('topic', '')}** ({item.get('duration', '')})")
                 st.caption(f"Builds on: {item.get('builds_on', 'Fundamentals')}")
     
     if 'emerging_trends' in recommendations:
-        with st.expander("🚀 Emerging Trends in This Field"):
+        with st.expander("Emerging Trends in This Field"):
             for trend in recommendations['emerging_trends']:
                 st.markdown(f"**{trend.get('trend', '')}**")
                 st.markdown(f"Relevance: {trend.get('relevance', '')} | Maturity: {trend.get('maturity_level', '')}")

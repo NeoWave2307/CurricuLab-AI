@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_industry_alignment_prompt
 
-st.set_page_config(page_title="Industry Alignment Analysis", page_icon="🏭", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Industry Alignment Analysis", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Professor_Dashboard.py")
 
-st.title("🏭 Industry Alignment Analysis")
+st.title("Industry Alignment Analysis")
 st.caption("Analyze how well your curriculum aligns with current industry demands")
 
 # Form
@@ -122,19 +116,19 @@ if 'industry_analysis' in st.session_state:
     
     # Industry Skill Demands
     if 'industry_skill_demands' in analysis:
-        with st.expander("📊 Current Industry Skill Demands", expanded=True):
+        with st.expander("Current Industry Skill Demands", expanded=True):
             for skill in analysis['industry_skill_demands']:
                 demand = skill.get('demand_level', '')
-                emoji = "🔥" if demand == "Very High" else "⬆️" if demand == "High" else "➡️"
+                emoji = ""
                 st.markdown(f"{emoji} **{skill.get('skill', '')}** - Demand: {demand}")
                 st.caption(f"Trend: {skill.get('trend', '')} | Salary Impact: {skill.get('salary_impact', '')}")
     
     # Coverage Analysis
     if 'curriculum_coverage' in analysis:
-        with st.expander("✅ Curriculum Coverage Analysis"):
+        with st.expander("Curriculum Coverage Analysis"):
             for item in analysis['curriculum_coverage']:
                 coverage = item.get('coverage_status', '')
-                icon = "✅" if coverage == "Well Covered" else "⚠️" if coverage == "Partially Covered" else "❌"
+                icon = ""
                 st.markdown(f"{icon} **{item.get('skill_area', '')}**")
                 st.markdown(f"Status: {coverage}")
                 if item.get('courses_covering'):
@@ -145,7 +139,7 @@ if 'industry_analysis' in st.session_state:
     
     # Missing Skills
     if 'missing_critical_skills' in analysis:
-        with st.expander("🚨 Missing Critical Skills"):
+        with st.expander("Missing Critical Skills"):
             for skill in analysis['missing_critical_skills']:
                 st.markdown(f"**{skill.get('skill', '')}**")
                 st.markdown(f"Industry Importance: {skill.get('importance', '')}")
@@ -154,7 +148,7 @@ if 'industry_analysis' in st.session_state:
     
     # Emerging Technologies
     if 'emerging_technologies' in analysis:
-        with st.expander("🚀 Emerging Technologies to Consider"):
+        with st.expander("Emerging Technologies to Consider"):
             for tech in analysis['emerging_technologies']:
                 st.markdown(f"**{tech.get('technology', '')}**")
                 st.markdown(f"Adoption Stage: {tech.get('adoption_stage', '')} | Relevance: {tech.get('relevance', '')}")
@@ -163,10 +157,10 @@ if 'industry_analysis' in st.session_state:
     
     # Recommendations
     if 'recommendations' in analysis:
-        with st.expander("💡 Actionable Recommendations"):
+        with st.expander("Actionable Recommendations"):
             for rec in analysis['recommendations']:
                 priority = rec.get('priority', '')
-                emoji = "🔴" if priority == "High" else "🟡" if priority == "Medium" else "🟢"
+                emoji = ""
                 st.markdown(f"{emoji} **{rec.get('recommendation', '')}**")
                 st.caption(f"Priority: {priority} | Implementation Effort: {rec.get('implementation_effort', '')}")
                 if rec.get('expected_impact'):

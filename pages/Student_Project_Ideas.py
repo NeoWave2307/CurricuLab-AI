@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_project_ideas_prompt
 
-st.set_page_config(page_title="Project Ideas", page_icon="💡", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Project Ideas", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Student_Dashboard.py")
 
-st.title("💡 Project Ideas")
+st.title("Project Ideas")
 st.caption("Get personalized project ideas to build your portfolio and learn new skills")
 
 with st.form("project_ideas_form"):
@@ -111,7 +105,7 @@ if 'project_ideas' in st.session_state:
     
     if 'project_ideas' in projects:
         for idx, project in enumerate(projects['project_ideas'], 1):
-            with st.expander(f"💡 Project {idx}: {project.get('title', '')}", expanded=(idx==1)):
+            with st.expander(f"Project {idx}: {project.get('title', '')}", expanded=(idx==1)):
                 st.markdown(f"**{project.get('title', '')}**")
                 st.caption(f"Complexity: {project.get('complexity', '')} | Duration: {project.get('estimated_duration', '')}")
                 
@@ -142,17 +136,17 @@ if 'project_ideas' in st.session_state:
                         st.markdown(f"  - {resource}")
                 
                 if project.get('portfolio_value'):
-                    st.success(f"💼 Portfolio Value: {project['portfolio_value']}")
+                    st.success(f"Portfolio Value: {project['portfolio_value']}")
     
     if 'skill_progression_path' in projects:
-        with st.expander("📈 Skill Progression Path"):
+        with st.expander("Skill Progression Path"):
             st.markdown("*Recommended order to build these projects for maximum learning:*")
             for idx, step in enumerate(projects['skill_progression_path'], 1):
                 st.markdown(f"{idx}. **{step.get('project', '')}**")
                 st.caption(f"Focus: {step.get('skill_focus', '')}")
     
     if 'open_source_opportunities' in projects:
-        with st.expander("🌍 Open Source Opportunities"):
+        with st.expander("Open Source Opportunities"):
             for opp in projects['open_source_opportunities']:
                 st.markdown(f"**{opp.get('project', '')}**")
                 st.markdown(f"{opp.get('description', '')}")

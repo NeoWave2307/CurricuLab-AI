@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_learning_outcome_mapping_prompt
 
-st.set_page_config(page_title="Learning Outcome Mapping", page_icon="🎯", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Learning Outcome Mapping", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Professor_Dashboard.py")
 
-st.title("🎯 Learning Outcome Mapping")
+st.title("Learning Outcome Mapping")
 st.caption("Map course topics to program outcomes and accreditation standards")
 
 # Form
@@ -112,7 +106,7 @@ if 'outcome_mapping' in st.session_state:
     
     # Course Learning Outcomes
     if 'learning_outcomes' in mapping:
-        with st.expander("📋 Course Learning Outcomes (CLOs)", expanded=True):
+        with st.expander("Course Learning Outcomes (CLOs)", expanded=True):
             for outcome in mapping['learning_outcomes']:
                 st.markdown(f"**CLO-{outcome.get('clo_number', '')}:** {outcome.get('outcome_statement', '')}")
                 st.caption(f"Bloom's Level: {outcome.get('blooms_level', '')} | Assessment: {outcome.get('assessment_method', '')}")
@@ -120,7 +114,7 @@ if 'outcome_mapping' in st.session_state:
     
     # Topic Mapping
     if 'topic_outcome_mapping' in mapping:
-        with st.expander("🔗 Topic-to-Outcome Mapping"):
+        with st.expander("Topic-to-Outcome Mapping"):
             for item in mapping['topic_outcome_mapping']:
                 st.markdown(f"**Topic:** {item.get('topic', '')}")
                 st.markdown(f"Mapped to: {', '.join([f'CLO-{clo}' for clo in item.get('clos', [])])}")
@@ -130,14 +124,14 @@ if 'outcome_mapping' in st.session_state:
     
     # Program Outcome Mapping
     if 'program_outcome_mapping' in mapping:
-        with st.expander("🎓 Program Outcome (PO) Mapping"):
+        with st.expander("Program Outcome (PO) Mapping"):
             for po in mapping['program_outcome_mapping']:
                 st.markdown(f"**{po.get('po_code', '')}:** {po.get('po_description', '')}")
                 st.caption(f"Mapped CLOs: {', '.join([f'CLO-{clo}' for clo in po.get('mapped_clos', [])])} | Strength: {po.get('mapping_strength', '')}")
     
     # Assessment Strategy
     if 'assessment_strategy' in mapping:
-        with st.expander("📝 Assessment Strategy"):
+        with st.expander("Assessment Strategy"):
             for assessment in mapping['assessment_strategy']:
                 st.markdown(f"**{assessment.get('assessment_type', '')}** ({assessment.get('weightage', '')}%)")
                 st.markdown(f"Evaluates: {', '.join([f'CLO-{clo}' for clo in assessment.get('evaluates_clos', [])])}")
@@ -146,7 +140,7 @@ if 'outcome_mapping' in st.session_state:
     
     # Accreditation Alignment
     if 'accreditation_alignment' in mapping:
-        with st.expander("✅ Accreditation Alignment"):
+        with st.expander("Accreditation Alignment"):
             for align in mapping['accreditation_alignment']:
                 st.markdown(f"**{align.get('framework', '')}**")
                 st.markdown(f"Standards Met: {', '.join(align.get('standards_met', []))}")

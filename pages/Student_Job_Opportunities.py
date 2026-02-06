@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_job_opportunities_prompt
 
-st.set_page_config(page_title="Job Opportunities", page_icon="💼", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Job Opportunities", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Student_Dashboard.py")
 
-st.title("💼 Job Opportunities")
+st.title("Job Opportunities")
 st.caption("Discover job roles, companies, and opportunities matching your skillset")
 
 with st.form("job_opportunities_form"):
@@ -73,14 +67,14 @@ with st.form("job_opportunities_form"):
 
 if submitted and field_of_study and skills:
     prompt = get_job_opportunities_prompt(
+        skills=skills,
+        interests=interests,
+        experience_level=experience_years,
+        location_preference=location if location else None,
         education_level=education_level,
         field_of_study=field_of_study,
-        skills=skills,
-        experience_years=experience_years,
         job_types=", ".join(job_types),
-        preferred_industries=", ".join(preferred_industries),
-        location=location if location else None,
-        interests=interests if interests else None
+        preferred_industries=", ".join(preferred_industries)
     )
     
     with st.spinner("Finding matching job opportunities..."):
@@ -114,10 +108,10 @@ if 'job_opportunities' in st.session_state:
     st.markdown("## Your Job Opportunities")
     
     if 'recommended_roles' in opportunities:
-        with st.expander("🎯 Recommended Job Roles", expanded=True):
+        with st.expander("Recommended Job Roles", expanded=True):
             for role in opportunities['recommended_roles']:
                 match = role.get('match_percentage', 0)
-                color = "🟢" if match >= 80 else "🟡" if match >= 60 else "🔵"
+                color = ""
                 st.markdown(f"{color} **{role.get('role_title', '')}** - {match}% match")
                 st.markdown(f"**Description:** {role.get('description', '')}")
                 st.caption(f"Typical Salary: {role.get('salary_range', '')} | Growth Potential: {role.get('growth_potential', '')}")
@@ -129,7 +123,7 @@ if 'job_opportunities' in st.session_state:
                 st.markdown("---")
     
     if 'target_companies' in opportunities:
-        with st.expander("🏢 Target Companies"):
+        with st.expander("Target Companies"):
             for company in opportunities['target_companies']:
                 st.markdown(f"**{company.get('company_name', '')}**")
                 st.markdown(f"Type: {company.get('company_type', '')} | Size: {company.get('size', '')}")
@@ -139,7 +133,7 @@ if 'job_opportunities' in st.session_state:
                 st.markdown("")
     
     if 'job_search_strategy' in opportunities:
-        with st.expander("📋 Job Search Strategy"):
+        with st.expander("Job Search Strategy"):
             for strategy in opportunities['job_search_strategy']:
                 st.markdown(f"**{strategy.get('strategy', '')}**")
                 st.markdown(f"{strategy.get('description', '')}")
@@ -150,20 +144,20 @@ if 'job_opportunities' in st.session_state:
                 st.markdown("")
     
     if 'application_tips' in opportunities:
-        with st.expander("💡 Application Tips"):
+        with st.expander("Application Tips"):
             for tip in opportunities['application_tips']:
                 st.info(f"**{tip.get('area', '')}:** {tip.get('tip', '')}")
     
     if 'skill_development' in opportunities:
-        with st.expander("📚 Skills to Develop"):
+        with st.expander("Skills to Develop"):
             for skill in opportunities['skill_development']:
                 priority = skill.get('priority', '')
-                emoji = "🔴" if priority == "High" else "🟡" if priority == "Medium" else "🟢"
+                emoji = ""
                 st.markdown(f"{emoji} **{skill.get('skill', '')}**")
                 st.caption(f"Time to learn: {skill.get('time_to_learn', '')} | Resources: {skill.get('learning_resources', '')}")
     
     if 'networking_suggestions' in opportunities:
-        with st.expander("🤝 Networking Suggestions"):
+        with st.expander("Networking Suggestions"):
             for suggestion in opportunities['networking_suggestions']:
                 st.markdown(f"- {suggestion}")
     

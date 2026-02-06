@@ -30,7 +30,7 @@ class CurriculumVectorStore:
             metadata={"description": "Educational curriculum examples and templates"}
         )
         
-        print(f"✓ ChromaDB initialized at: {persist_directory}")
+        print(f"ChromaDB initialized at: {persist_directory}")
         print(f"  Collection: {self.collection.name}")
         print(f"  Documents: {self.collection.count()}")
     
@@ -63,7 +63,7 @@ class CurriculumVectorStore:
             ids=ids
         )
         
-        print(f"✓ Added {len(documents)} documents to vector store")
+        print(f"Added {len(documents)} documents to vector store")
     
     def similarity_search(
         self,
@@ -112,4 +112,4 @@ class CurriculumVectorStore:
             name="curriculum_knowledge_base",
             metadata={"description": "Educational curriculum examples and templates"}
         )
-        print("✓ Vector store cleared")
+        print("Vector store cleared")

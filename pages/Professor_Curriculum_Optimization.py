@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_curriculum_optimization_prompt
 
-st.set_page_config(page_title="Curriculum Optimization", page_icon="⚙️", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Curriculum Optimization", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Professor_Dashboard.py")
 
-st.title("⚙️ Curriculum Optimization")
+st.title("Curriculum Optimization")
 st.caption("Get data-driven recommendations to optimize your curriculum structure")
 
 with st.form("curriculum_optimization_form"):
@@ -101,7 +95,7 @@ if 'optimization' in st.session_state:
     st.markdown("## Curriculum Optimization Report")
     
     if 'current_analysis' in optimization:
-        with st.expander("📊 Current Curriculum Analysis", expanded=True):
+        with st.expander("Current Curriculum Analysis", expanded=True):
             analysis = optimization['current_analysis']
             if isinstance(analysis, dict):
                 for key, value in analysis.items():
@@ -110,7 +104,7 @@ if 'optimization' in st.session_state:
                 st.markdown(analysis)
     
     if 'optimization_recommendations' in optimization:
-        with st.expander("💡 Optimization Recommendations"):
+        with st.expander("Optimization Recommendations"):
             for rec in optimization['optimization_recommendations']:
                 st.markdown(f"### {rec.get('area', '')}")
                 st.markdown(f"**Current Issue:** {rec.get('current_issue', '')}")
@@ -119,7 +113,7 @@ if 'optimization' in st.session_state:
                 st.markdown("---")
     
     if 'proposed_structure' in optimization:
-        with st.expander("📋 Proposed Curriculum Structure"):
+        with st.expander("Proposed Curriculum Structure"):
             for semester in optimization['proposed_structure']:
                 st.markdown(f"### {semester.get('semester', '')}")
                 if semester.get('courses'):
@@ -129,7 +123,7 @@ if 'optimization' in st.session_state:
                 st.markdown("")
     
     if 'prerequisite_flow' in optimization:
-        with st.expander("🔗 Improved Prerequisite Flow"):
+        with st.expander("Improved Prerequisite Flow"):
             for flow in optimization['prerequisite_flow']:
                 st.markdown(f"**{flow.get('course', '')}**")
                 st.markdown(f"Prerequisites: {', '.join(flow.get('prerequisites', []))}")
@@ -137,7 +131,7 @@ if 'optimization' in st.session_state:
                 st.markdown("")
     
     if 'implementation_plan' in optimization:
-        with st.expander("🚀 Implementation Plan"):
+        with st.expander("Implementation Plan"):
             for phase in optimization['implementation_plan']:
                 st.markdown(f"**Phase {phase.get('phase', '')}:** {phase.get('title', '')}")
                 st.markdown(f"Timeline: {phase.get('timeline', '')}")

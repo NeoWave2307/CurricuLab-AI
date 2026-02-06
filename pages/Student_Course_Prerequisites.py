@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_course_prerequisites_prompt
 
-st.set_page_config(page_title="Course Prerequisites", page_icon="📖", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Course Prerequisites", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Student_Dashboard.py")
 
-st.title("📖 Course Prerequisites")
+st.title("Course Prerequisites")
 st.caption("Understand what you need to know before taking a course and get preparation guidance")
 
 with st.form("course_prerequisites_form"):
@@ -108,21 +102,21 @@ if 'prerequisites' in st.session_state:
         readiness = assessment.get('readiness_level', '')
         
         if readiness == "Ready":
-            st.success(f"✅ **You are {readiness}** to take this course!")
+            st.success(f"**You are {readiness}** to take this course!")
         elif readiness == "Nearly Ready":
-            st.info(f"🟡 **You are {readiness}** - just a bit more preparation needed")
+            st.info(f"**You are {readiness}** - just a bit more preparation needed")
         else:
-            st.warning(f"⚠️ **Readiness Level: {readiness}** - preparation recommended")
+            st.warning(f"**Readiness Level: {readiness}** - preparation recommended")
         
         if assessment.get('explanation'):
             st.markdown(f"*{assessment['explanation']}*")
     
     # Required Prerequisites
     if 'required_prerequisites' in prerequisites:
-        with st.expander("📚 Required Prerequisites", expanded=True):
+        with st.expander("Required Prerequisites", expanded=True):
             for prereq in prerequisites['required_prerequisites']:
                 importance = prereq.get('importance', '')
-                emoji = "🔴" if importance == "Critical" else "🟡" if importance == "Important" else "🟢"
+                emoji = ""
                 
                 st.markdown(f"{emoji} **{prereq.get('topic', '')}**")
                 st.markdown(f"**Why needed:** {prereq.get('why_needed', '')}")
@@ -139,7 +133,7 @@ if 'prerequisites' in st.session_state:
     
     # Preparation Plan
     if 'preparation_plan' in prerequisites:
-        with st.expander("📋 Your Preparation Plan"):
+        with st.expander("Your Preparation Plan"):
             for phase in prerequisites['preparation_plan']:
                 st.markdown(f"### {phase.get('phase', '')}")
                 st.caption(f"Duration: {phase.get('duration', '')} | Priority: {phase.get('priority', '')}")
@@ -162,7 +156,7 @@ if 'prerequisites' in st.session_state:
     
     # Knowledge Gaps
     if 'knowledge_gaps' in prerequisites:
-        with st.expander("❌ Knowledge Gaps to Fill"):
+        with st.expander("Knowledge Gaps to Fill"):
             for gap in prerequisites['knowledge_gaps']:
                 st.markdown(f"**{gap.get('gap', '')}**")
                 st.caption(f"Impact: {gap.get('impact', '')} | Time to fill: {gap.get('time_to_fill', '')}")
@@ -172,7 +166,7 @@ if 'prerequisites' in st.session_state:
     
     # Recommended Resources
     if 'recommended_resources' in prerequisites:
-        with st.expander("📚 Recommended Resources"):
+        with st.expander("Recommended Resources"):
             for resource in prerequisites['recommended_resources']:
                 st.markdown(f"**{resource.get('type', '')}:** {resource.get('title', '')}")
                 st.caption(f"Focus: {resource.get('focus_area', '')} | Difficulty: {resource.get('difficulty', '')}")
@@ -182,9 +176,9 @@ if 'prerequisites' in st.session_state:
     
     # Study Tips
     if 'study_tips' in prerequisites:
-        with st.expander("💡 Study Tips"):
+        with st.expander("Study Tips"):
             for tip in prerequisites['study_tips']:
-                st.info(f"• {tip}")
+                st.info(f"- {tip}")
     
     st.markdown("---")
     st.download_button(

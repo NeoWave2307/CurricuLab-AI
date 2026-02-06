@@ -77,7 +77,7 @@ def load_curriculum_documents():
 
 def main():
     """Initialize vector store with curriculum examples."""
-    print("🚀 Initializing Curriculum Knowledge Base...")
+    print("Initializing Curriculum Knowledge Base...")
     print("=" * 60)
     
     # Initialize vector store
@@ -85,19 +85,19 @@ def main():
     
     # Clear existing data (optional - comment out to keep existing data)
     if vector_store.get_count() > 0:
-        print(f"\n⚠ Found {vector_store.get_count()} existing documents")
+        print(f"\nFound {vector_store.get_count()} existing documents")
         response = input("Clear existing data? (y/n): ")
         if response.lower() == 'y':
             vector_store.clear()
-            print("✓ Cleared existing data")
+            print("Cleared existing data")
     
     # Load documents
-    print("\n📚 Loading curriculum documents...")
+    print("\nLoading curriculum documents...")
     documents, metadatas, ids = load_curriculum_documents()
-    print(f"✓ Loaded {len(documents)} documents")
+    print(f"Loaded {len(documents)} documents")
     
     # Add to vector store
-    print("\n💾 Adding documents to vector store...")
+    print("\nAdding documents to vector store...")
     vector_store.add_documents(
         documents=documents,
         metadatas=metadatas,
@@ -105,7 +105,7 @@ def main():
     )
     
     print("\n" + "=" * 60)
-    print("✅ Knowledge base initialized successfully!")
+    print("Knowledge base initialized successfully!")
     print(f"   Total documents: {vector_store.get_count()}")
     print(f"   Storage location: {vector_store.persist_directory}")
     print("\nYou can now run the Streamlit app: streamlit run app.py")

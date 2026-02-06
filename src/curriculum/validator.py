@@ -103,9 +103,9 @@ class CurriculumValidator:
         is_valid, issues = self.validate(curriculum)
         
         if is_valid:
-            return "✓ Curriculum validation passed!"
+            return "Curriculum validation passed!"
         else:
-            report = "⚠ Curriculum validation found issues:\n"
+            report = "Curriculum validation found issues:\n"
             for i, issue in enumerate(issues, 1):
                 report += f"{i}. {issue}\n"
             return report

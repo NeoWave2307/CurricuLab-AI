@@ -6,25 +6,18 @@ import json
 from src.llm.client import GeminiClient  
 from src.llm.scenario_prompts import get_course_structure_prompt
 
-st.set_page_config(page_title="Course Structure Generator", page_icon="📚", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Course Structure Generator", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-    .stButton>button:hover { background: #f7f7f8; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Professor_Dashboard.py")
 
-st.title("📚 Course Structure Generator")
+st.title("Course Structure Generator")
 st.caption("Generate comprehensive course structures with topics, objectives, and assessments")
 
 # Form

@@ -6,24 +6,18 @@ import json
 from src.llm.client import GeminiClient
 from src.llm.scenario_prompts import get_prerequisite_analysis_prompt
 
-st.set_page_config(page_title="Prerequisite Analysis", page_icon="🔗", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Prerequisite Analysis", layout="centered", initial_sidebar_state="collapsed")
 
 # Remove Streamlit branding
-st.markdown("""
-<style>
-    #MainMenu {display: none !important;} footer {display: none !important;} header {display: none !important;}
-    [data-testid="stSidebar"] {display: none !important;} [data-testid="stToolbar"] {display: none !important;}
-    [data-testid="stDecoration"] {display: none !important;} [data-testid="stStatusWidget"] {display: none !important;}
-    .stDeployButton {display: none !important;}
-    .stApp { background: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif; }
-    .stButton>button { background: white; color: #202123; border: 1px solid #d9d9e3; border-radius: 6px; padding: 0.75rem 1.5rem; width: 100%; }
-</style>
-""", unsafe_allow_html=True)
+from src.utils.theme import apply_theme
 
-if st.button("← Back to Dashboard"):
+# Apply custom theme
+apply_theme()
+
+if st.button("Back to Dashboard"):
     st.switch_page("pages/Professor_Dashboard.py")
 
-st.title("🔗 Prerequisite Analysis")
+st.title("Prerequisite Analysis")
 st.caption("Analyze and optimize course prerequisites and dependencies")
 
 with st.form("prerequisite_analysis_form"):
@@ -103,10 +97,10 @@ if 'prerequisite_analysis' in st.session_state:
     st.markdown("## Prerequisite Analysis Report")
     
     if 'required_prerequisites' in analysis:
-        with st.expander("✅ Recommended Prerequisites", expanded=True):
+        with st.expander("Recommended Prerequisites", expanded=True):
             for prereq in analysis['required_prerequisites']:
                 importance = prereq.get('importance', '')
-                emoji = "🔴" if importance == "Critical" else "🟡" if importance == "Important" else "🟢"
+                emoji = ""
                 st.markdown(f"{emoji} **{prereq.get('course', '')}**")
                 st.markdown(f"**Rationale:** {prereq.get('rationale', '')}")
                 if prereq.get('concepts_needed'):
@@ -114,7 +108,7 @@ if 'prerequisite_analysis' in st.session_state:
                 st.markdown("")
     
     if 'missing_prerequisites' in analysis:
-        with st.expander("⚠️ Missing Prerequisites"):
+        with st.expander("Missing Prerequisites"):
             for missing in analysis['missing_prerequisites']:
                 st.markdown(f"**{missing.get('prerequisite', '')}**")
                 st.markdown(f"Why needed: {missing.get('reason', '')}")
@@ -124,21 +118,21 @@ if 'prerequisite_analysis' in st.session_state:
                 st.markdown("---")
     
     if 'unnecessary_prerequisites' in analysis:
-        with st.expander("➖ Potentially Unnecessary Prerequisites"):
+        with st.expander("Potentially Unnecessary Prerequisites"):
             for unnecessary in analysis['unnecessary_prerequisites']:
                 st.markdown(f"**{unnecessary.get('course', '')}**")
                 st.markdown(f"Reason: {unnecessary.get('reason', '')}")
                 st.markdown("")
     
     if 'corequisites' in analysis:
-        with st.expander("🔄 Suggested Corequisites"):
+        with st.expander("Suggested Corequisites"):
             for coreq in analysis['corequisites']:
                 st.markdown(f"**{coreq.get('course', '')}**")
                 st.markdown(f"Benefit: {coreq.get('benefit', '')}")
                 st.markdown("")
     
     if 'prerequisite_chain' in analysis:
-        with st.expander("🔗 Complete Prerequisite Chain"):
+        with st.expander("Complete Prerequisite Chain"):
             for level in analysis['prerequisite_chain']:
                 st.markdown(f"**Level {level.get('level', '')}:** {level.get('description', '')}")
                 if level.get('courses'):
@@ -146,7 +140,7 @@ if 'prerequisite_analysis' in st.session_state:
                 st.markdown("")
     
     if 'knowledge_gaps' in analysis:
-        with st.expander("📊 Identified Knowledge Gaps"):
+        with st.expander("Identified Knowledge Gaps"):
             for gap in analysis['knowledge_gaps']:
                 st.markdown(f"**Gap:** {gap.get('gap', '')}")
                 st.markdown(f"Current Coverage: {gap.get('current_coverage', '')}")
