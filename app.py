@@ -29,7 +29,7 @@ with header_col1:
 
 with header_col2:
     try:
-        st.image("src/assets/logo.png", use_container_width=True)
+        st.image("src/assets/logo.jpeg", use_container_width=True)
     except Exception as e:
         # Fallback if image not found
         pass
